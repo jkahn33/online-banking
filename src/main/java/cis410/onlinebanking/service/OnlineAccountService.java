@@ -16,24 +16,21 @@ import java.util.Date;
 import java.util.Optional;
 
 @Service
-public class AccountService {
+public class OnlineAccountService {
     private final OnlineAccountDAO accountDAO;
     private final PasswordEncoder passwordEncoder;
     private final CustomerDAO customerDAO;
     private final AddressDAO addressDAO;
-    private final BankAccountDAO bankAccountDAO;
 
     @Autowired
-    public AccountService(OnlineAccountDAO accountDAO,
-                          PasswordEncoder passwordEncoder,
-                          CustomerDAO customerDAO,
-                          AddressDAO addressDAO,
-                          BankAccountDAO bankAccountDAO) {
+    public OnlineAccountService(OnlineAccountDAO accountDAO,
+                                PasswordEncoder passwordEncoder,
+                                CustomerDAO customerDAO,
+                                AddressDAO addressDAO) {
         this.accountDAO = accountDAO;
         this.passwordEncoder = passwordEncoder;
         this.customerDAO = customerDAO;
         this.addressDAO = addressDAO;
-        this.bankAccountDAO = bankAccountDAO;
     }
 
     public boolean verifyAccount(LoginAttempt attempt){
@@ -66,19 +63,5 @@ public class AccountService {
         accountDAO.save(onlineAccount);
 
         return new ResponseObject(true, "Successfully created new account.");
-    }
-
-    public void createBankAccount(NewBankAccount bankAccount){
-        AccountType type = null;
-        switch (bankAccount.getType()){
-            case 1:
-                type = AccountType.CHECKING;
-                break;
-            case 2:
-                type = AccountType.SAVINGS;
-                break;
-        }
-        Optional<OnlineAccount> onlineAccountOptional = accountDAO.findById(bankAccount.getCustomerId());
-        BankAccount account = new BankAccount(onlineAccountOptional.get().getCustomer(), type, (float)0.0);
     }
 }
