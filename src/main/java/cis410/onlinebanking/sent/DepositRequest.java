@@ -1,16 +1,36 @@
 package cis410.onlinebanking.sent;
 
 public class DepositRequest {
-    private int account;
+    private String routing;
+    private String account;
+    private String holder;
+    private String user;
+    private int target;
     private float amount;
 
     public DepositRequest(){}
 
-    public int getAccount() {
-        return account;
+    public int getTarget() {
+        return target;
     }
 
     public float getAmount() {
         return amount;
+    }
+
+    public String getRouting() {
+        return routing;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public String getHolder() {
+        return holder;
+    }
+
+    public String getUser(){
+        return user;
     }
 }

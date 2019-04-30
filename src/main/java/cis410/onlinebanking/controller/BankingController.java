@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Controller
 public class BankingController {
+    private final static Logger log = Logger.getLogger(BankingController.class.getName());
+
     private final OnlineAccountService onlineAccountService;
     private final BankAccountService bankAccountService;
 
@@ -25,7 +28,7 @@ public class BankingController {
         this.bankAccountService = bankAccountService;
     }
 
-    @PostMapping("login")
+    @PostMapping("/login")
     @ResponseBody
     public void login(@RequestBody LoginAttempt attempt, HttpServletResponse res){
         if(onlineAccountService.verifyAccount(attempt)){
@@ -42,27 +45,22 @@ public class BankingController {
         return onlineAccountService.createOnlineAccount(onlineAccount);
     }
 
-    @PostMapping("/createBankAccount")
-    @ResponseBody
-    public void createBankAccount(@RequestBody NewBankAccount bankAccount){
-        bankAccountService.createBankAccount(bankAccount);
-    }
-
     @PostMapping("/transfer")
     @ResponseBody
-    public ResponseObject transferMoney(TransferRequest transferRequest){
+    public ResponseObject transferMoney(@RequestBody TransferRequest transferRequest){
         return bankAccountService.transfer(transferRequest);
     }
 
     @PostMapping("/deposit")
     @ResponseBody
-    public ResponseObject depositMoney(DepositRequest depositRequest){
+    public ResponseObject depositMoney(@RequestBody DepositRequest depositRequest){
         return bankAccountService.depositMoney(depositRequest);
     }
 
-    @PostMapping
+    @PostMapping("/getUserAccounts")
     @ResponseBody
-    public List<BankAccount> getUserAccounts(StringWrapper userName){
-        return bankAccountService.getUserAccounts(userName.getString());
+    public List<BankAccount> getUserAccounts(@RequestBody StringWrapper userName){
+        log.info("NAME: " + userName.getWrappedString());
+        return bankAccountService.getUserAccounts(userName.getWrappedString());
     }
 }

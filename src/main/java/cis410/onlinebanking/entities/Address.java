@@ -9,11 +9,13 @@ import javax.persistence.Id;
 public class Address {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer id;
+    private int id;
     private String addr;
     private String city;
     private String country;
     private int zipcode;
+
+    public Address(){}
 
     public Address(String addr, String city, String country, int zipcode) {
         this.addr = addr;

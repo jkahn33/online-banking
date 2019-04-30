@@ -3,6 +3,7 @@ package cis410.onlinebanking.sent;
 public class NewAddress {
     private String addr;
     private String city;
+    private String state;
     private String country;
     private int zipcode;
 
@@ -22,5 +23,9 @@ public class NewAddress {
 
     public int getZipcode() {
         return zipcode;
+    }
+
+    public String getState(){
+        return state;
     }
 }

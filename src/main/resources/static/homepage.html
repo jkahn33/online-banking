@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>JJBanks</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body onload="fillInfo()">
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="homepage.html">JJBank</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="homepage.html">Home</a></li>
+            <li><a href="deposit.html">Make Deposit</a></li>
+            <li><a href="transfer.html">Make Transfer</a></li>
+        </ul>
+    </div>
+</nav>
+<h1 id="accounts-header" style="margin: 10px"></h1>
+<div style="margin: 50px;">
+    <h2>Checking:</h2>
+    <h3 id="checkingBalance"></h3>
+    <br>
+    <h2>Savings:</h2>
+    <h3 id="savingsBalance"></h3>
+    <br>
+</div>
+<script>
+    function fillInfo(){
+        const xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function(){
+            if (xmlhttp.readyState === XMLHttpRequest.DONE) {
+                const data = JSON.parse(xmlhttp.responseText);
+                document.getElementById("accounts-header").innerText = "Welcome " + data[0].customer.name + "!";
+                document.getElementById("checkingBalance").innerText = "$" + data[0].balance.toFixed(2);
+                document.getElementById("savingsBalance").innerText = "$" + data[1].balance.toFixed(2);
+            }
+        };
+        xmlhttp.open("POST", "http://localhost:8080/getUserAccounts");
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(JSON.stringify({wrappedString:localStorage.getItem("userName")}));
+    }
+</script>
+</body>
+</html>

@@ -4,6 +4,7 @@ public class TransferRequest {
     private int from;
     private int to;
     private float amount;
+    private String user;
 
     public TransferRequest(){}
 
@@ -17,5 +18,9 @@ public class TransferRequest {
 
     public float getAmount() {
         return amount;
+    }
+
+    public String getUser(){
+        return user;
     }
 }

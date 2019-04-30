@@ -1,11 +1,11 @@
 package cis410.onlinebanking.sent;
 
 public class StringWrapper {
-    private String string;
+    private String wrappedString;
 
     public StringWrapper(){}
 
-    public String getString() {
-        return string;
+    public String getWrappedString() {
+        return wrappedString;
     }
 }

@@ -2,6 +2,7 @@ package cis410.onlinebanking.service;
 
 import cis410.onlinebanking.ResponseObject;
 import cis410.onlinebanking.dao.BankAccountDAO;
+import cis410.onlinebanking.dao.CustomerDAO;
 import cis410.onlinebanking.dao.OnlineAccountDAO;
 import cis410.onlinebanking.entities.AccountType;
 import cis410.onlinebanking.entities.BankAccount;
@@ -27,32 +28,38 @@ public class BankAccountService {
         this.bankAccountDAO = bankAccountDAO;
     }
 
-    public void createBankAccount(NewBankAccount bankAccount){
-        AccountType type = null;
-        switch (bankAccount.getType()){
+    public synchronized ResponseObject transfer(TransferRequest transferRequest){
+        Optional<OnlineAccount> onlineAccountOptional = onlineAccountDAO.findById(transferRequest.getUser());
+        if(!onlineAccountOptional.isPresent()){
+            return new ResponseObject(false, "User doesn't exist.");
+        }
+        AccountType fromType = null;
+        switch(transferRequest.getFrom()){
             case 1:
-                type = AccountType.CHECKING;
+                fromType = AccountType.CHECKING;
                 break;
             case 2:
-                type = AccountType.SAVINGS;
+                fromType = AccountType.SAVINGS;
                 break;
         }
-        Optional<OnlineAccount> onlineAccountOptional = onlineAccountDAO.findById(bankAccount.getCustomerId());
-        BankAccount account = new BankAccount(onlineAccountOptional.get().getCustomer(), type, (float)0.0);
-
-        bankAccountDAO.save(account);
-    }
-
-    public synchronized ResponseObject transfer(TransferRequest transferRequest){
-        Optional<BankAccount> bankAccountOptional = bankAccountDAO.findById(transferRequest.getFrom());
+        AccountType toType = null;
+        switch(transferRequest.getTo()){
+            case 1:
+                toType = AccountType.CHECKING;
+                break;
+            case 2:
+                toType = AccountType.SAVINGS;
+                break;
+        }
+        Optional<BankAccount> bankAccountOptional = bankAccountDAO.findByCustomerAndType(onlineAccountOptional.get().getCustomer(), fromType);
         if(!bankAccountOptional.isPresent()){
-            return new ResponseObject(false, "Bank Account doesn't exist.");
+            return new ResponseObject(false, "From Account doesn't exist.");
         }
         BankAccount from = bankAccountOptional.get();
 
-        bankAccountOptional = bankAccountDAO.findById(transferRequest.getTo());
+        bankAccountOptional = bankAccountDAO.findByCustomerAndType(onlineAccountOptional.get().getCustomer(), toType);
         if(!bankAccountOptional.isPresent()){
-            return new ResponseObject(false, "Bank Account doesn't exist.");
+            return new ResponseObject(false, "To Account doesn't exist.");
         }
         BankAccount to = bankAccountOptional.get();
 
@@ -69,7 +76,21 @@ public class BankAccountService {
     }
 
     public synchronized ResponseObject depositMoney(DepositRequest depositRequest){
-        Optional<BankAccount> bankAccountOptional = bankAccountDAO.findById(depositRequest.getAccount());
+        Optional<OnlineAccount> onlineAccountOptional = onlineAccountDAO.findById(depositRequest.getUser());
+        if(!onlineAccountOptional.isPresent()){
+            return new ResponseObject(false, "User doesn't exist.");
+        }
+
+        AccountType type = null;
+        switch(depositRequest.getTarget()){
+            case 1:
+                type = AccountType.CHECKING;
+                break;
+            case 2:
+                type = AccountType.SAVINGS;
+                break;
+        }
+        Optional<BankAccount> bankAccountOptional = bankAccountDAO.findByCustomerAndType(onlineAccountOptional.get().getCustomer(), type);
         if(!bankAccountOptional.isPresent()){
             return new ResponseObject(false, "Bank Account doesn't exist.");
         }

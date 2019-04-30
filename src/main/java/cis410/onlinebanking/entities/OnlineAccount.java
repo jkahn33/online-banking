@@ -1,20 +1,20 @@
 package cis410.onlinebanking.entities;
 
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
+@Entity
+@Table(name = "online_account")
 public class OnlineAccount {
 
     @Id
     @NotNull
+    @Column(length=100)
     private String userName;
     private String password;
     private Timestamp creation;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
@@ -24,6 +24,8 @@ public class OnlineAccount {
         this.creation = creation;
         this.customer = customer;
     }
+
+    public OnlineAccount(){}
 
     public String getUserName() {
         return userName;

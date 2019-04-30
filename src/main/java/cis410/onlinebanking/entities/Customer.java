@@ -6,13 +6,15 @@ import javax.persistence.*;
 public class Customer {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer id;
+    private int id;
     private String name;
     private String dateOfBirth;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "address_id")
     private Address address;
     private String phone;
+
+    public Customer(){}
 
     public Customer(String name, String dateOfBirth, Address address, String phone) {
         this.name = name;

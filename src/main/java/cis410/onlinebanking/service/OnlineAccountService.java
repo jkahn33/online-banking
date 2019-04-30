@@ -21,16 +21,19 @@ public class OnlineAccountService {
     private final PasswordEncoder passwordEncoder;
     private final CustomerDAO customerDAO;
     private final AddressDAO addressDAO;
+    private final BankAccountDAO bankAccountDAO;
 
     @Autowired
     public OnlineAccountService(OnlineAccountDAO accountDAO,
                                 PasswordEncoder passwordEncoder,
                                 CustomerDAO customerDAO,
-                                AddressDAO addressDAO) {
+                                AddressDAO addressDAO,
+                                BankAccountDAO bankAccountDAO) {
         this.accountDAO = accountDAO;
         this.passwordEncoder = passwordEncoder;
         this.customerDAO = customerDAO;
         this.addressDAO = addressDAO;
+        this.bankAccountDAO = bankAccountDAO;
     }
 
     public boolean verifyAccount(LoginAttempt attempt){
@@ -58,6 +61,11 @@ public class OnlineAccountService {
 
         Customer customer = new Customer(newCustomer.getName(), newCustomer.getDateOfBirth(), address, newCustomer.getPhone());
         customerDAO.save(customer);
+
+        BankAccount checking = new BankAccount(customer, AccountType.CHECKING, (float)0.0);
+        BankAccount savings = new BankAccount(customer, AccountType.SAVINGS, (float)0.0);
+        bankAccountDAO.save(checking);
+        bankAccountDAO.save(savings);
 
         OnlineAccount onlineAccount = new OnlineAccount(account.getUserName(), passwordEncoder.encode(account.getPassword()), currentTime, customer);
         accountDAO.save(onlineAccount);

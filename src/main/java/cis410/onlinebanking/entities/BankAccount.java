@@ -6,12 +6,14 @@ import javax.persistence.*;
 public class BankAccount {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer id;
-    @OneToOne(fetch = FetchType.LAZY)
+    private int id;
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn
     private Customer customer;
     private AccountType type;
     private float balance;
+
+    public BankAccount(){}
 
     public BankAccount(Customer customer, AccountType type, float balance) {
         this.customer = customer;

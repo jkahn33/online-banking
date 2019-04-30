@@ -6,6 +6,11 @@ public class NewBankAccount {
 
     public NewBankAccount(){}
 
+    public NewBankAccount(String customerId, int type) {
+        this.customerId = customerId;
+        this.type = type;
+    }
+
     public String getCustomerId() {
         return customerId;
     }
