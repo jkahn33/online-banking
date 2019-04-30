@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>JJBanks</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="js/deposit.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="homepage.html">JJBank</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="homepage.html">Home</a></li>
+            <li class="active"><a href="#">Make deposit</a></li>
+            <li><a href="transfer.html">Make Transfer</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <h3>Make Online Deposit</h3>
+    <p>Enter Valid Information</p>
+</div>
+<div style="width: 50%; margin: 50px;">
+    <div class="form-group">
+        <label for="routing">Routing Number</label>
+        <input class="form-control" id="routing" type="text">
+    </div>
+
+    <div class="form-group">
+        <label for="account">Account Number</label>
+        <input class="form-control" id="account" type="text">
+    </div>
+
+    <div class="form-group">
+        <label for="holder">Holder Name</label>
+        <input class="form-control" id="holder" type="text">
+    </div>
+
+    <div class="form-group">
+        <label for="amount">Amount</label>
+        <input class="form-control" id="amount" type="text">
+    </div>
+
+    <div class="dropdown">
+        <label for="target">Target Account</label>
+        <input class="form-control" id="target" type="text">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="margin-top: 5px">Deposit To
+            <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li><a onclick="account1()">Checking</a></li>
+            <li><a onclick="account2()">Saving</a></li>
+        </ul>
+    </div>
+
+    <div style="margin-top: 10px" class="custom-control custom-checkbox mb-3">
+        <button class="btn btn-lg btn-primary btn-block text-uppercase" onclick="submitDeposit()">Submit</button>
+        <hr class="my-4">
+    </div>
+</div>
+
+<script>
+    function account1(){
+        document.getElementById("target").value = "Checking";
+    }
+    function account2(){
+        document.getElementById("target").value = "Savings";
+    }
+</script>
+
+</body>
+</html>
+
